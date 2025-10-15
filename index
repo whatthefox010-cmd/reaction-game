@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>반응 속도 게임</title>
+<style>
+body {
+  text-align:center;
+  font-family:sans-serif;
+  background:#222;
+  color:#fff;
+}
+#gameBox {
+  width:200px;
+  height:200px;
+  margin:50px auto;
+  border-radius:10px;
+  background:#0b84ff;
+  cursor:pointer;
+}
+button {
+  margin-top:20px;
+  padding:10px 20px;
+  font-size:16px;
+  border:none;
+  border-radius:8px;
+  background:#ff6b6b;
+  color:white;
+  cursor:pointer;
+}
+</style>
+</head>
+<body>
+<h2>반응 속도 게임</h2>
+<p>게임 시작 후, 색이 바뀌면 최대한 빨리 클릭하세요!</p>
+
+<div id="gameBox"></div>
+<button id="startBtn">게임 시작</button>
+<p id="info"></p>
+
+<script>
+let gameBox = document.getElementById('gameBox');
+let startBtn = document.getElementById('startBtn');
+let info = document.getElementById('info');
+let startTime, timeoutId;
+
+startBtn.onclick = () => {
+    startBtn.disabled = true;
+    info.textContent = "잠시 기다려주세요...";
+    gameBox.style.background = "#0b84ff";
+    let randomDelay = Math.floor(Math.random()*5000)+1000; // 1~6초 랜덤
+    timeoutId = setTimeout(() => {
+        gameBox.style.background = "#ff6b6b";
+        startTime = Date.now();
+        info.textContent = "클릭하세요!";
+    }, randomDelay);
+}
+
+gameBox.onclick = () => {
+    if (!startTime) {
+        info.textContent = "아직 준비되지 않았습니다!";
+        clearTimeout(timeoutId);
+        startBtn.disabled = false;
+        gameBox.style.background = "#0b84ff";
+    } else {
+        let reaction = (Date.now() - startTime)/1000;
+        info.textContent = "반응 속도: " + reaction.toFixed(3) + "초";
+        startTime = null;
+        startBtn.disabled = false;
+        gameBox.style.background = "#0b84ff";
+    }
+}
+</script>
+</body>
+</html>
